@@ -347,6 +347,69 @@ html.printing .sub2{font-size:15px}
 .openline{font-size:27px;margin:18px 0 18px}
 [aria-label="Let's talk"] .startbtn{padding:22px 18px;font-size:24px}
 [aria-label="Let's talk"] .contact a{font-size:24px}
+/* phone layout: text reflows into one scrolling column */
+html.phone #viewport{inset:0 0 46px 0;display:block}
+html.phone #bar{height:46px}
+html.phone #rotate{display:none}
+html.phone #stage{width:100%;height:100%;transform:none;box-shadow:none}
+html.phone body{font-size:18px}
+html.phone .slide{padding:20px 18px 26px 24px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+html.phone .slide:not(.title)::before{width:6px}
+html.phone .slide.on{display:block}
+html.phone .slide.title.on{display:block;padding:0}
+html.phone .title .r{height:38%}
+html.phone .title .r img{object-position:center 30%}
+html.phone .title .l{padding:22px 20px 24px}
+html.phone .title h1{font-size:34px;margin-bottom:10px}
+html.phone .title .sub{font-size:20px}
+html.phone .title .who{margin-top:14px;font-size:15.5px}
+html.phone .title .start{margin-top:14px}
+html.phone .slide h2,html.phone .slide[aria-label] h2{font-size:29px!important;line-height:1.12;margin-bottom:14px}
+html.phone .kicker{font-size:15px;margin-bottom:6px}
+html.phone .slide .grid,html.phone .two,html.phone .three,html.phone .chips,html.phone .stack2 .panels,html.phone .stack2.c3 .panels{display:grid!important;grid-template-columns:1fr!important;gap:14px!important;margin-top:0!important}
+html.phone .grid.g2>.card:nth-child(2),html.phone .grid.g2>.jr+.card{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:14px}
+html.phone .jr{gap:12px}
+html.phone .slide .jstep p:not(.lab),html.phone .slide .lead,html.phone .slide .first,html.phone .slide .sub2,html.phone .slide .panels ul,html.phone .slide .plain,html.phone .slide .two p:not(.lab),html.phone .slide .three p:not(.lab),html.phone .slide .tl+.panels p,html.phone .slide .note,html.phone .slide .panels.note,html.phone .slide .openline,html.phone .slide .ideas,html.phone .slide .combo,html.phone .slide .grow{font-size:18.5px!important;line-height:1.32}
+html.phone .slide .ph,html.phone .slide .stack2 .ph,html.phone .slide[aria-label] .stack2 .ph{font-size:17px;margin-bottom:3px}
+html.phone .slide .tl+.panels h3{font-size:24px}
+html.phone .slide .stack .panel{margin-bottom:12px}
+html.phone .slide li,html.phone .slide .panels li{margin-bottom:6px}
+html.phone .plain,html.phone .ideas{padding-left:22px}
+html.phone .ideas li{margin-bottom:12px}
+html.phone .panels.note,html.phone .note{min-height:0;margin-top:12px}
+html.phone .tabrow{gap:2px 14px;margin-bottom:10px}
+html.phone .tab,html.phone .slide .grid.g2 .tab,html.phone .slide[aria-label] .tab{font-size:15.5px}
+html.phone .hint{margin-bottom:6px}
+html.phone .tl{grid-template-columns:repeat(3,1fr);gap:6px}
+html.phone .tl::before{display:none}
+html.phone .stop{padding:30px 2px 6px}
+html.phone .stop b{font-size:17px}.stop time{font-size:13px}
+html.phone .chip{font-size:18px;padding:9px 0}
+html.phone .orb{height:270px;margin-top:8px}
+html.phone .orbt{font-size:17px;top:8%}
+html.phone .ob{font-size:13.5px}
+html.phone .os{width:96px;height:96px;left:56%;top:48%;font-size:12px}
+html.phone .slide .panel.fig{height:auto!important}
+html.phone .fig img{height:auto;max-height:46vh}
+html.phone .lwrap{transform:scale(.8);transform-origin:top center;height:250px!important}
+html.phone .cval,html.phone .slide[aria-label] .cval{font-size:46px}
+html.phone .sl,html.phone .bars{font-size:16px;grid-template-columns:90px 1fr 34px}
+html.phone .barw{height:20px}
+html.phone .bal{grid-template-columns:1fr}
+html.phone .bal>div{font-size:17px}
+html.phone .startbtn,html.phone .slide[aria-label] .startbtn{padding:12px 14px;font-size:18px}
+html.phone .contact a{font-size:18px;word-break:break-word}
+html.phone .slide .src{position:static;margin-top:18px;font-size:12.5px;line-height:1.35}
+html.phone .back{position:static;display:block;margin-top:10px}
+html.phone .slide.title.on{display:flex;flex-direction:column}
+html.phone .title .l{flex:none}
+html.phone .title .r{flex:1;height:auto;min-height:0}
+html.phone .slide>[data-tabs]{display:block}
+html.phone .slide>[data-tabs]>.panels.card,html.phone .slide .tl+.panels{display:block;min-height:0!important;margin-top:14px!important}
+html.phone .slide>.stack2>.panels.card{display:grid!important}
+html.phone .stop{padding-top:38px}
+html.phone .stop time{font-size:13px}
+html.phone [aria-label="Let's talk"] .lab{font-size:17px}
 </style>
 </head>
 <body>
@@ -766,7 +829,10 @@ html.printing .sub2{font-size:15px}
       count=document.getElementById('count'),prog=document.getElementById('prog'),fs=document.getElementById('fs'),
       still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function $(id){return document.getElementById(id)}
-  function fit(){var s=Math.min(vp.clientWidth/1280,vp.clientHeight/720);stage.style.transform='scale('+s+')'}
+  function fit(){
+    var w=window.innerWidth,h=window.innerHeight,touch=window.matchMedia&&matchMedia('(pointer:coarse)').matches;var ph=(w<700||(touch&&Math.min(w,h)<600))&&!document.documentElement.classList.contains('printing');document.documentElement.classList.toggle('phone',ph);
+    if(ph){stage.style.transform='';return}
+    var s=Math.min(vp.clientWidth/1280,vp.clientHeight/720);stage.style.transform='scale('+s+')'}
   function countUp(sl){
     sl.querySelectorAll('.num').forEach(function(e){
       var n=+e.dataset.n,p=e.dataset.p||'',s=e.dataset.s||'',t0=null;
@@ -778,7 +844,7 @@ html.printing .sub2{font-size:15px}
   }
   function go(n,push){
     n=Math.max(0,Math.min(slides.length-1,n));
-    slides[i].classList.remove('on');i=n;slides[i].classList.add('on');
+    slides[i].classList.remove('on');i=n;slides[i].classList.add('on');slides[i].scrollTop=0;
     count.textContent=(i+1)+' / '+slides.length;
     prog.style.width=((i+1)/slides.length*100)+'%';
     prev.disabled=i===0;next.disabled=i===slides.length-1;
@@ -860,8 +926,8 @@ html.printing .sub2{font-size:15px}
   function onFs(){fs.textContent=isFs()?'Exit full screen':'⛶ Full screen';setTimeout(fit,60)}
   document.addEventListener('fullscreenchange',onFs);document.addEventListener('webkitfullscreenchange',onFs);
   var t;document.addEventListener('mousemove',function(){var r=document.documentElement;r.classList.add('show');clearTimeout(t);t=setTimeout(function(){r.classList.remove('show')},2200)});
-  window.addEventListener('beforeprint',function(){document.documentElement.classList.add('printing')});
-  window.addEventListener('afterprint',function(){document.documentElement.classList.remove('printing')});
+  window.addEventListener('beforeprint',function(){document.documentElement.classList.add('printing');document.documentElement.classList.remove('phone')});
+  window.addEventListener('afterprint',function(){document.documentElement.classList.remove('printing');fit()});
   window.addEventListener('resize',fit);window.addEventListener('orientationchange',function(){setTimeout(fit,200)});
   window.addEventListener('hashchange',function(){go(fromHash(),false)});
   slides[0].classList.add('on');go(fromHash(),false);fit();
